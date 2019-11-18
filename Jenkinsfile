@@ -23,23 +23,23 @@ pipeline {
         }
       }
     }
-    // stage('Validate HTML') {
-    //   steps {
-    //     container('html-proofer') {
-    //       dir ("site") {
-    //           sh ("htmlproofer public --internal-domains ${env.JOB_NAME} --external_only --only-4xx")
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Validate HTML') {
+      steps {
+        container('html-proofer') {
+          dir ("site") {
+              sh ("htmlproofer public --internal-domains ${env.JOB_NAME} --external_only --only-4xx")
+          }
+        }
+      }
+    }
     stage('Docker Build & Push Image') {
       steps {
         container('docker') {
             dir ("site") {
                 sh ("docker build -t ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} .")
                 sh ("docker push ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
-                sh ("docker tag ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:latest")
-                sh ("docker push ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:latest")
+                sh ("docker tag ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${BRANCH_NAME}-latest")
+                sh ("docker push ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${BRANCH_NAME}-latest")
             }
         }
       }
