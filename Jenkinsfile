@@ -6,7 +6,7 @@ pipeline {
   }
   environment {
     DOCKER_IMAGE_NAME = 'website'
-    DOCKER_HUB_ACCOUNT = 'mnravi85'
+    DOCKER_HUB_ACCOUNT = 'mnravi'
   }
   stages {
     stage('Clone Repository') {
